@@ -8,3 +8,5 @@ resource "aws_s3_bucket" "teraforming_bucket" {
   bucket = "teraforming-bucket-20210929"
   acl = "private"
 }
+
+resource "aws_default_vpc" "default" {}
