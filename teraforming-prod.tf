@@ -51,3 +51,11 @@ resource "aws_instance" "instance-teraforming-prod" {
     "teraforming": "true"
   }
 }
+
+resource "aws_eip" "epi-teraforming-prod" {
+  instance = aws_instance.instance-teraforming-prod.id
+
+  tags = {
+    "teraforming": "true"
+  }
+}
