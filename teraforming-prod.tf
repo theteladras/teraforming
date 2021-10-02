@@ -39,3 +39,15 @@ resource "aws_security_group" "sec-teraforming-prod" {
     "teraforming": "true"
   }
 }
+
+resource "aws_instance" "instance-teraforming-prod" {
+  ami = "ami-0ed34781dc2ec3964"
+  instance_type = "t2.nano"
+  vpc_security_group_ids = [
+    aws_security_group.sec-teraforming-prod.id
+  ]
+
+  tags = {
+    "teraforming": "true"
+  }
+}
