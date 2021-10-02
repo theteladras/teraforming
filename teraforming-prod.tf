@@ -11,8 +11,8 @@ resource "aws_s3_bucket" "teraforming_bucket" {
 
 resource "aws_default_vpc" "default" {}
 
-resource "aws_security_group" "sec-teraforming-prod" {
-  name = "sec-teraforming-prod"
+resource "aws_security_group" "sec_teraforming_prod" {
+  name = "sec_teraforming_prod"
   description = "allow inbound http and https and all for outbound"
 
   ingress {
@@ -21,6 +21,7 @@ resource "aws_security_group" "sec-teraforming-prod" {
     protocol = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   ingress {
     from_port = 443
     to_port = 443
@@ -40,11 +41,13 @@ resource "aws_security_group" "sec-teraforming-prod" {
   }
 }
 
-resource "aws_instance" "instance-teraforming-prod" {
+resource "aws_instance" "instance_teraforming_prod" {
+  count = 2
+
   ami = "ami-0ed34781dc2ec3964"
   instance_type = "t2.nano"
   vpc_security_group_ids = [
-    aws_security_group.sec-teraforming-prod.id
+    aws_security_group.sec_teraforming_prod.id
   ]
 
   tags = {
@@ -52,9 +55,12 @@ resource "aws_instance" "instance-teraforming-prod" {
   }
 }
 
-resource "aws_eip" "epi-teraforming-prod" {
-  instance = aws_instance.instance-teraforming-prod.id
+resource "aws_eip_association" "eip_associate_teraforming_prod" {
+  instance_id = aws_instance.instance_teraforming_prod.0.id
+  allocation_id = aws_eip.eip_teraforming_prod.id
+}
 
+resource "aws_eip" "eip_teraforming_prod" {
   tags = {
     "teraforming": "true"
   }
